@@ -186,3 +186,13 @@ So far so good！布谷鸟过滤器看起来很完美啊！删除功能和获取
 论文中也提到了这个问题，见下图： 
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/bGribGtYC3mIh7yriajtOedrOJBTc6ja34uMVzGbicXYzWq6yfBaCUX4Lbicib16oeiaeOEnZibuHficg76EDYiaRJicicgnw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+这句话明确告诉我们如果想要让布谷鸟过滤器支持删除操作，那么就必须不能允许插入操作多次插入同一个元素，确保每一个元素不会被插入多次（kb+1）。这里的 k 是指 hash 函数的个数 2，b 是指单个位置上的座位数，这里我们是 4。
+
+在现实世界的应用中，确保一个元素不被插入指定的次数那几乎是不可能做到的。因为要想做到，则必须维护一个外部的字典来记录每个元素的插入次数呢——那这个外部字典的存储空间怎么办？
+
+而因为不能完美的支持删除操作，也就无法较为准确地估计内部的元素数量。
+
+来自CuckooFilter4j 的特别说明
+大意：布谷鸟过滤器可以在不消耗额外空间的条件下，且保证相同元素数量有限（<8 ~ 9)的情况下，达成删除元素。但删除不存在的元素可以导致 false negative。
+![](https://mmbiz.qpic.cn/mmbiz_jpg/bGribGtYC3mIh7yriajtOedrOJBTc6ja34e3CDT1myiagWgjIYNBFcTnkGbgibEtuqUYGAF0OJvAgbPcuNhmoGvnFA/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
