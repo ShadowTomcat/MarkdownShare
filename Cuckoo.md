@@ -74,25 +74,25 @@
 
 首先布谷鸟过滤器还是只会选用两个 hash 函数，但是每个位置可以放置多个座位。问题在于，过滤器中只存储指纹信息，但而计算元素的另一个位置需要元素本身，例如：
 ```markdown
-fp = fingerprint(x)
-p1 = hash1(x) % length
-p2 = hash2(x) % length
+byte fp = fingerprint(x)
+int pos1 = hashCode1(x) % length
+int pos2 = hashCode2(x) % length
 ```
 只知道了 p1 和 x 的指纹，是没办法直接计算出 p2 的。
 
 #### 解法
 布谷鸟过滤器巧妙的地方就在于设计了一个独特的 hash 函数，使得可以根据 p1 和 元素指纹 直接计算出 p2，而不需要完整的 x 元素。
 ```markdown
-fp = fingerprint(x)
-p1 = hash(x)
-p2 = p1 ^ hash(fp)  // 异或运算
+byte fp = fingerprint(x)
+int pos1 = hashCode(x)
+int pos2 = pos1 ^ hashCode(fp)  // 异或运算
 
 根据XOR的性质可得：
-p1 = p2 ^ hash(fp)
+int pos1 = pos2 ^ hashCode(fp)
 ```
-所以我们根本不需要知道当前的位置是 p1 还是 p2，只需要将当前的位置和 hash(fp) 进行异或计算就可以得到对偶位置。而且只需要确保 hash(fp) != 0 就可以确保 p1 != p2，如此就不会出现自己踢自己导致死循环的问题。
+所以我们根本不需要知道当前的位置是 pos1 还是 pos2，只需要将当前的位置和 hashCode(fp) 进行异或计算就可以得到对偶位置。而且只需要确保 hashCode(fp) != 0 就可以确保 pos1 != pos2，如此就不会出现自己踢自己导致死循环的问题。
 
-也许你会问为什么这里的 hash 函数不需要对数组的长度取模呢？实际上是需要的，但是布谷鸟过滤器强制数组的长度必须是 2 的指数，所以对数组的长度取模等价于取 hash 值的最后 n 位。在进行异或运算时，忽略掉低 n 位 之外的其它位就行。将计算出来的位置 p 保留低 n 位就是最终的对偶位置。
+也许你会问为什么这里的 hashCode 函数不需要对数组的长度取模呢？实际上是需要的，但是布谷鸟过滤器强制数组的长度必须是 2 的指数，所以对数组的长度取模等价于取 hash 值的最后 n 位。在进行异或运算时，忽略掉低 n 位 之外的其它位就行。将计算出来的位置 pos 保留低 n 位就是最终的对偶位置。
 
 ### 数据结构
 
@@ -114,8 +114,8 @@ public class cuckoo_filter {
 ```
 public boolean insert(x) {
    byte fp = fingerprint(x);
-   int pos1 = hash(x);
-   int pos2 = pos1 ^ hash(fp);
+   int pos1 = hashCode(x);
+   int pos2 = pos1 ^ hashCode(fp);
   // 尝试加入任意一个位置的任意空坐席
   if (inserted(map[pos1], fp) || inserted(map[pos2], fp)) {
      nums++;
@@ -129,7 +129,7 @@ public boolean insert(x) {
 	byte old_fp = replaced(map[pos], fp);
 	fp = old_fp;
 	// 计算另一个位置
-    pos = pos ^ hash(fp)
+    pos = pos ^ hashCode(fp)
 	// 尝试加入另一个位置的空坐席
     if (inserted(map[pos], fp)){
 	  nums++;
@@ -150,8 +150,8 @@ public boolean insert(x) {
 ```
 public boolean contains(x) {
    byte fp = fingerprint(x);
-   int pos1 = hash(x);
-   int pos2 = pos1 ^ hash(fp);
+   int pos1 = hashCode(x);
+   int pos2 = pos1 ^ hashCode(fp);
    return contains(map[pos1], fp) || contains(map[pos2], fp);
 }
 ```
@@ -163,8 +163,8 @@ public boolean contains(x) {
 ```
 public boolean delete(x) {
    byte fp = fingerprint(x);
-   int pos1 = hash(x);
-   int pos2 = pos1 ^ hash(fp);
+   int pos1 = hashCode(x);
+   int pos2 = pos1 ^ hashCode(fp);
    boolean success = deleted(map[pos1], fp) || deleted(map[pos2], fp);
    if (success) nums--;
    return ok
