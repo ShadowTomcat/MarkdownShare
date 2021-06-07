@@ -1,8 +1,7 @@
----
-title: 布谷鸟过滤器（Cuckoo Filter）
----
 
-# 前提
+# 布谷鸟过滤器（Cuckoo Filter）
+
+## 前提
 
 在我们工作中，如果需要判断一个数据是否存在于一个集合中，通常需要将所有数据保存起来（数据库，各类缓存），再通过查询和比较确定。
 
@@ -17,7 +16,7 @@ title: 布谷鸟过滤器（Cuckoo Filter）
 2. 查询性能弱：布隆过滤器使用多个hash函数计算位图多个不同位点，由于多个位点在内存中不连续，CPU寻址花销较大。
 3. 空间利用率低。
 
-# 布谷鸟过滤器
+## 布谷鸟过滤器
 
 在论文《Cuckoo Filter: Practically Better Than Bloom》中，直接提及了该过滤器的四大优点：
 >1. It supports adding and removing items dynamically;
