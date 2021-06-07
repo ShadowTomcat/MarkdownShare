@@ -185,4 +185,4 @@ So far so good！布谷鸟过滤器看起来很完美啊！删除功能和获取
 
 论文中也提到了这个问题，见下图： 
 
-
+![](https://mmbiz.qpic.cn/mmbiz_png/bGribGtYC3mIh7yriajtOedrOJBTc6ja34uMVzGbicXYzWq6yfBaCUX4Lbicib16oeiaeOEnZibuHficg76EDYiaRJicicgnw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
